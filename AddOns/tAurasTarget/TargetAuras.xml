@@ -13,11 +13,11 @@
 		<Scripts>
 			<OnLoad>
 				tAurasOther_Onload(self)
-				print(2)
+				
 				CreateFrame('Frame',self:GetName()..'Moveable',self,'tAuraFrameMoveTemplate')
 				
 				_G[self:GetName()..'Moveable']:SetAllPoints(self)
-				print(5)
+				
 			</OnLoad>
 			  
 			<OnEvent>

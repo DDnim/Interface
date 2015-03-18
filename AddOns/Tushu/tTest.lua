@@ -9,7 +9,7 @@
 -- MyStatusBar:SetStatusBarColor(0,1,0)
 -- CastingBarFrame:SetStatusBarTexture("Interface\AddOns\Tushu\castbar")
 
-local mediapath = "Interface\\AddOns\\!iCatCaddy\\textures\\" 
+local mediapath = "Interface\\AddOns\\Tushu\\" 
 
 
 DDbarf3 = DDbarf3 or CreateFrame("Frame","rABS_Bar2Holder", MultiBarBottomLeft)
@@ -23,8 +23,6 @@ DDbarf3:SetScale(0.9)
 local DDbart3 = DDbarf3:CreateTexture(nil,"OVERLAY")
 DDbart3:SetTexture( mediapath .. "BottomLeftBar")
 DDbart3:SetAllPoints(DDbarf3)	
-
-local mediapath = "Interface\\AddOns\\!iCatCaddy\\textures\\" 
 
 DDbarf4 = DDbarf4 or CreateFrame("Frame","rABS_Bar3Holder",MultiBarBottomRight)
 DDbarf4:SetFrameStrata("BACKGROUND")
@@ -40,7 +38,6 @@ DDbart4 = DDbart4  or DDbarf4:CreateTexture(nil,"BACKGROUND")
 DDbart4:SetTexture(mediapath .. "BottomRightBar" )
 DDbart4:SetAllPoints(DDbarf4)
 
-local mediapath = "Interface\\AddOns\\!iCatCaddy\\textures\\" 
 
 DDbarf = DDbarf or CreateFrame("Frame","rABS_Bar1Holder",ActionBarFrame)
 DDbarf:SetFrameStrata("BACKGROUND")

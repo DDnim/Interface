@@ -177,6 +177,7 @@ function tExtra_update(frame,tEx_Buffers)
 			buff:SetID()
 			buff:SetPoint("TOPLEFT",BUTTON_SIZE*((num-1)%(math.floor(frame:GetWidth()/BUTTON_SIZE))),-BUTTON_SIZE*math.floor((num-1)/(math.floor(frame:GetWidth()/BUTTON_SIZE))))
 		elseif buffer[2] == 'dbm' then
+			if not DBM then return end
 			buff =_G["tExtraDBM"..buffer[1]] or CreateFrame("Frame", "tExtraDBM"..buffer[1],frame,"tAuraDBMTemplate");
 			BUTTON_SIZE = 48
 			buff:SetSize(48,48)

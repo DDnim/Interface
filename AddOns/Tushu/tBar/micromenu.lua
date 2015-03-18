@@ -2,7 +2,7 @@
   -----------------------------
   -- INIT
   -----------------------------
-print(1)
+
   --get the addon namespace
   local addon, ns = ...
   local gcfg = ns.cfg
@@ -42,7 +42,7 @@ print(1)
 	CollectionsMicroButton,
 	StoreMicroButton
   }
-print(2)
+
   local NUM_MICROBUTTONS = # buttonList
   local buttonWidth = CharacterMicroButton:GetWidth()
   local buttonHeight = CharacterMicroButton:GetHeight()

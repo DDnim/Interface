@@ -11,9 +11,7 @@ tSetId = function(self)
 	memory_count()
 	local name, _, texture, count, _, duration, expirationTime, unitCaster, _, shouldConsolidate, spellId = UnitAura(self.unit, self.id, self.filter);
 	
-	if spellId == 173321 then
-	print(unitCaster)
-	end
+	
 	
 	
 	if name == nil then
