@@ -1,0 +1,10 @@
+## Interface: 60000
+## Author: BN_ASIA Tushu#3421
+## Notes: Talent Frame Art & Control
+## Version: v1.2
+## SavedVariablesPerCharacter: tTalent_DB
+
+lib.lua
+Tag.lua
+tTalent.lua
+tTalent_config.lua

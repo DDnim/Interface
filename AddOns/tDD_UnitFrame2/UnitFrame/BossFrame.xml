@@ -1,0 +1,326 @@
+<?xml version="1.0"?>
+<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">
+
+<Button name="tBossFrameTemplate" parent="UIParent" resizable="true" enableMouse="true" movable="true" frameStrata="LOW" inherits="SecureUnitButtonTemplate" virtual="true">
+    <Size>
+      <AbsDimension x="250" y="15"/>
+    </Size>
+
+    <Layers>
+      <Layer level="BACKGROUND">
+        <Texture name= "$parentFrameBG" setAllPoints="true">
+          <Color a="0.4" r="0" g="0" b="0"> 
+</Color>
+        </Texture>
+      </Layer>
+      <Layer level="HIGH"> 
+
+<FontString  name="$parent_HP_text_Percent" parentKey="hppercent" inherits="GameFontHighlight" text="100%" setAllPoints="true" >
+<Anchors> 
+<Anchor point="TOPLEFT"  relativePoint="BOTTOMLEFT"> 
+
+</Anchor>
+</Anchors>
+<Size>
+
+</Size>
+</FontString>
+
+<FontString  name="$parent_Unit_Name" parentKey="unitname" inherits="GameFontHighlight" text="100%" setAllPoints="true" >
+<Anchors> 
+<Anchor point="TOPLEFT"  relativePoint="BOTTOMLEFT"> 
+<Offset x="0" y="-18"/>
+</Anchor>
+</Anchors>
+<Size>
+
+</Size>
+</FontString>
+
+<FontString  name="$parentBorder1" inherits="GameFontHighlight" text="|" setAllPoints="true">
+<Anchors> 
+<Anchor point="LEFT"  relativeTo = "$parent_HP_text_Percent" relativePoint="RIGHT"> 
+
+</Anchor>
+</Anchors>
+<Color a="1" r="0" g="1" b="0" />
+</FontString>
+
+<FontString  name="$parent_HP_text" parentKey="hp" inherits="GameFontHighlight" text="100" setAllPoints="true">
+<Anchors> 
+<Anchor point="LEFT"  relativeTo = "$parentBorder1" relativePoint="RIGHT"> 
+
+</Anchor>
+</Anchors>
+<Size>
+
+</Size>
+<Color a="1" r="1" g="0" b="1" />
+</FontString>
+
+<FontString  name="$parentBorder2" inherits="GameFontHighlight" text="|" setAllPoints="true">
+<Anchors> 
+<Anchor point="LEFT"  relativeTo = "$parent_HP_text" relativePoint="RIGHT"> 
+
+</Anchor>
+</Anchors>
+<Color a="1" r="0" g="1" b="0" />
+</FontString>
+
+<FontString  name="$parent_POWER_text" parentKey="mp" inherits="GameFontHighlight" text="100" setAllPoints="true">
+<Anchors> 
+<Anchor point="LEFT" relativeTo = "$parentBorder2" relativePoint="RIGHT"> 
+
+</Anchor>
+</Anchors>
+<Color a="1" r="0" g="1" b="1" />
+<Size>
+
+</Size>
+</FontString>
+</Layer>
+    </Layers>
+    <Scripts>
+      <OnLoad>
+	  self:RegisterForClicks("AnyUp")
+self:RegisterForDrag("LeftButton","RightButton","MiddleButton")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+self:RegisterEvent("UNIT_POWER")
+self:RegisterEvent("PLAYER_TARGET_CHANGED")
+self:RegisterEvent("PLAYER_REGEN_ENABLED")
+self.truename = "boss"..(self:GetName()):sub(11,11)
+self:SetAttribute('*type1', 'target')
+self:SetAttribute('unit',self.truename)
+self.togglemenu = function() ToggleDropDownMenu(1, nil, TargetFrameDropDown, "$parentFrame", 120, 10) end
+self:SetAttribute('*type2', 'togglemenu')
+RegisterStateDriver(self, "visibility", "[@"..self.truename..",exists] show; hide")
+</OnLoad>
+      <OnEvent>
+local health = UnitHealth(self.truename)
+
+self.truename = "boss"..(self:GetName()):sub(11,11)
+if UnitExists(self.truename) then
+self.hppercent:SetText((math.ceil((health/UnitHealthMax(self.truename)*1000))/10).."%")
+
+if health > 1e6 then
+	self.hp:SetText(((math.ceil(health/100000))/10+0.0).."M")
+elseif health > 1e3 then
+	self.hp:SetText(((math.ceil(health/100))/10+0.0).."K")
+else
+	self.hp:SetText(health)
+end
+
+local power = UnitPower(self.truename)
+if power > 1e6 then
+	self.mp:SetText((math.ceil(power/100000)/10).."K")
+elseif power > 1e3 then
+	self.mp:SetText((math.ceil(power/100)/10).."K")
+else
+	self.mp:SetText(power)
+end
+end
+
+self.unitname:SetText(UnitName(self.truename))
+
+</OnEvent>
+      <OnUpdate>
+</OnUpdate>
+      <OnDragStart>
+if button == "LeftButton" then
+	self:StartMoving()
+elseif button == "RightButton" then
+	ToggleDropDownMenu(1, nil, TargetFrameDropDown, "$parentFrame", 120, 10);
+end
+<!-- tMarkDragStart(self,button) -->
+</OnDragStart>
+      <OnDragStop>
+self:StopMovingOrSizing();
+<!-- tMarkDragStop(self) -->
+</OnDragStop>
+    </Scripts>
+  </Button>
+ 
+ 
+<StatusBar name = "tBossFrameHealthBarTemplate" enableMouse="false" minvalue = "1" maxvalue = "100" defaultvalue = "50" virtual="true">
+    <BarTexture>
+    <Color a="0.9" r="1" g="1" b="1"/>
+	</BarTexture>
+<Size>
+<AbsDimension x="250" y="6" />
+</Size>
+<Anchors> 
+<Anchor point="LEFT"  relativePoint="LEFT"> 
+<Offset x="1" y="0"/>
+</Anchor>
+<Anchor point="RIGHT"  relativePoint="RIGHT"> 
+<Offset x="-1" y="0"/>
+</Anchor>
+<Anchor point="TOP"  relativePoint="TOP"> 
+<Offset x="0" y="-1"/>
+</Anchor>
+</Anchors>
+<Scripts>
+<OnLoad>
+
+self:RegisterEvent("UNIT_HEALTH")
+self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+self.truename = "boss"..(self:GetName()):sub(11,11)
+self:SetMinMaxValues(0,UnitHealthMax(self.truename))
+self:SetValue(UnitHealth(self.truename))
+
+
+</OnLoad>
+<OnEvent>
+local CLASS = select(2,UnitClass("player"))
+	  self:SetStatusBarColor(RAID_CLASS_COLORS[CLASS]["r"],RAID_CLASS_COLORS[CLASS]["g"],RAID_CLASS_COLORS[CLASS]["b"]) 
+
+local health = UnitHealth(self.truename)
+self:SetMinMaxValues(0,UnitHealthMax(self.truename))
+self:SetValue(health)
+
+</OnEvent>
+</Scripts>
+</StatusBar>
+ 
+<StatusBar name = "tBossFramePowerBarTemplate" enableMouse="false" minvalue = "1" maxvalue = "100" defaultvalue = "50" virtual="true">
+    <BarTexture>
+    <Color a="0.9" r="1" g="1" b="1"/>
+	</BarTexture>
+
+<Size>
+<AbsDimension x="250" y="6" />
+</Size>
+<Anchors> 
+<Anchor point="LEFT"  relativePoint="LEFT"> 
+<Offset x="1" y="0"/>
+</Anchor>
+<Anchor point="RIGHT"  relativePoint="RIGHT"> 
+<Offset x="-1" y="0"/>
+</Anchor>
+<!-- <Anchor point="TOP"  relativePoint="BOTTOM" relativeto="tBossFrFrameHealthBar"> 
+<Offset x="0" y="-1"/>
+</Anchor> -->
+<Anchor point="BOTTOM"  relativePoint="BOTTOM"> 
+<Offset x="0" y="1"/>
+</Anchor>
+</Anchors>
+<Scripts>
+<OnLoad>
+self:RegisterEvent("UNIT_POWER")
+self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+self.truename = "boss"..(self:GetName()):sub(11,11)
+self:SetMinMaxValues(0,select(1,UnitPowerMax(self.truename)))
+self:SetPoint("TOP", "tBossFrame"..(self:GetName()):sub(11,11).."HealthBar", "BOTTOM", relativeFrame, 0, 1);
+
+self:SetValue(UnitPower(self.truename))
+
+
+</OnLoad>
+<OnEvent>
+self:SetMinMaxValues(0,select(1,UnitPowerMax(self.truename)))
+local power = UnitPower(self.truename)
+self:SetValue(power)
+
+</OnEvent>
+</Scripts>
+</StatusBar>
+ 
+<Button name="tBossFrame1" parent="UIParent" resizable="true" enableMouse="true" movable="true" frameStrata="LOW" inherits="tBossFrameTemplate" >
+
+	<Anchors>
+      <Anchor point="RIGHT" relativePoint="RIGHT">
+        <Offset x="-200" y="200"/>
+      </Anchor>
+    </Anchors>
+</Button>
+
+<StatusBar name = "tBossFrame1HealthBar" parent = "tBossFrame1" enableMouse="false" minvalue = "1" maxvalue = "100" defaultvalue = "50" inherits="tBossFrameHealthBarTemplate">
+
+
+</StatusBar>
+
+<StatusBar name = "tBossFrame1PowerBar" parent = "tBossFrame1" enableMouse="false" minvalue = "1" maxvalue = "100" defaultvalue = "50" inherits="tBossFramePowerBarTemplate">
+
+
+</StatusBar>
+
+
+<Button name="tBossFrame2" parent="UIParent" resizable="true" enableMouse="true" movable="true" frameStrata="LOW" inherits="tBossFrameTemplate" >
+	<Anchors>
+      <Anchor point="RIGHT" relativePoint="RIGHT">
+        <Offset x="-200" y="100"/>
+      </Anchor>
+    </Anchors>
+ 
+</Button>
+
+<StatusBar name = "tBossFrame2HealthBar" parent = "tBossFrame2" enableMouse="false" minvalue = "1" maxvalue = "100" defaultvalue = "50" inherits="tBossFrameHealthBarTemplate">
+
+
+
+</StatusBar>
+
+<StatusBar name = "tBossFrame2PowerBar" parent = "tBossFrame2" enableMouse="false" minvalue = "1" maxvalue = "100" defaultvalue = "50" inherits="tBossFramePowerBarTemplate">
+
+
+</StatusBar>
+
+
+<Button name="tBossFrame3" parent="UIParent" resizable="true" enableMouse="true" movable="true" frameStrata="LOW" inherits="tBossFrameTemplate" >
+ <Anchors>
+      <Anchor point="RIGHT" relativePoint="RIGHT">
+        <Offset x="-200" y="0"/>
+      </Anchor>
+    </Anchors>
+ 
+</Button>
+
+
+<StatusBar name = "tBossFrame3HealthBar" parent = "tBossFrame3" enableMouse="false" minvalue = "1" maxvalue = "100" defaultvalue = "50" inherits="tBossFrameHealthBarTemplate">
+
+
+
+</StatusBar>
+
+<StatusBar name = "tBossFrame3PowerBar" parent = "tBossFrame3" enableMouse="false" minvalue = "1" maxvalue = "100" defaultvalue = "50" inherits="tBossFramePowerBarTemplate">
+
+
+</StatusBar>
+
+
+<Button name="tBossFrame4" parent="UIParent" resizable="true" enableMouse="true" movable="true" frameStrata="LOW" inherits="tBossFrameTemplate" >
+ <Anchors>
+      <Anchor point="RIGHT" relativePoint="RIGHT">
+        <Offset x="-200" y="-100"/>
+      </Anchor>
+    </Anchors>
+</Button>
+
+<StatusBar name = "tBossFrame4HealthBar" parent = "tBossFrame4" enableMouse="false" minvalue = "1" maxvalue = "100" defaultvalue = "50" inherits="tBossFrameHealthBarTemplate">
+
+</StatusBar>
+<StatusBar name = "tBossFrame4PowerBar" parent = "tBossFrame4" enableMouse="false" minvalue = "1" maxvalue = "100" defaultvalue = "50" inherits="tBossFramePowerBarTemplate">
+
+
+</StatusBar>
+
+<Button name="tBossFrame5" parent="UIParent" resizable="true" enableMouse="true" movable="true" frameStrata="LOW" inherits="tBossFrameTemplate" >
+ <Anchors>
+      <Anchor point="RIGHT" relativePoint="RIGHT">
+        <Offset x="-200" y="-200"/>
+      </Anchor>
+    </Anchors>
+</Button>
+
+<StatusBar name = "tBossFrame5HealthBar" parent = "tBossFrame5" enableMouse="false" minvalue = "1" maxvalue = "100" defaultvalue = "50" inherits="tBossFrameHealthBarTemplate">
+
+
+</StatusBar>
+<StatusBar name = "tBossFrame5PowerBar" parent = "tBossFrame5" enableMouse="false" minvalue = "1" maxvalue = "100" defaultvalue = "50" inherits="tBossFramePowerBarTemplate">
+
+
+</StatusBar>
+
+</Ui>

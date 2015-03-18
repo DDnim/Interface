@@ -1,0 +1,294 @@
+<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">
+  <Button name="tPlayerFrame" parent="UIParent" resizable="false" enableMouse="true" movable="true" frameStrata="LOW" inherits="SecureUnitButtonTemplate">
+    <Size>
+      <AbsDimension x="373.76" y="115.2"/>
+    </Size>
+    <Anchors>
+      <Anchor point="CENTER" relativePoint="CENTER">
+        <Offset x="-220" y="-280"/>
+      </Anchor>
+    </Anchors>
+    <Layers>
+      <Layer level="BACKGROUND">
+        <Texture name="$parentBackground" parentKey="Background" file="Interface\AddOns\tDD_UnitFrame2\media\player_bg">
+        <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER">
+              <Offset x="0" y="0"/>
+            </Anchor>
+          </Anchors>
+        </Texture>
+      </Layer>
+    </Layers>
+    <Scripts>
+      <OnLoad>
+self:RegisterForClicks("AnyUp")
+self:RegisterForDrag("LeftButton","RightButton","MiddleButton")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+self:SetAttribute('*type1', 'target')
+self:SetAttribute('unit','player')
+self.togglemenu = function() ToggleDropDownMenu(1, nil, PlayerFrameDropDown, "tPlayerFrame", 120, 10) end
+self:SetAttribute('*type2', 'togglemenu')
+</OnLoad>
+      <OnEvent></OnEvent>
+      <OnUpdate></OnUpdate>
+
+      <OnDragStart>
+if button == "LeftButton" then
+	self:StartMoving()
+elseif button == "RightButton" then
+	ToggleDropDownMenu(1, nil, PlayerFrameDropDown, "tPlayerFrame", 120, 10);
+end
+
+</OnDragStart>
+      <OnDragStop>
+self:StopMovingOrSizing();
+
+</OnDragStop>
+    </Scripts>
+  </Button>
+  <Frame name="tPlayerFrameButton" parent="tPlayerFrame" resizable="false" enableMouse="false" movable="true" inherits="SecureUnitButtonTemplate">
+    <Size>
+      <AbsDimension x="373.76" y="115.2"/>
+    </Size>
+    <Anchors>
+      <Anchor point="CENTER" relativePoint="CENTER">
+        <Offset x="0" y="0"/>
+      </Anchor>
+    </Anchors>
+    <Layers>
+      <Layer level="BACKGROUND"></Layer>
+      <Layer level="ARKWORK" textureSubLevel="5">
+        <Texture name="$parentOverlay" parentKey="Overlay" file="Interface\AddOns\tDD_UnitFrame2\media\player_player">
+        <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER">
+              <Offset x="0" y="0"/>
+            </Anchor>
+          </Anchors>
+        </Texture>
+      </Layer>
+      <Layer level="LOW">
+        <FontString name="$parentLeveltext" parentKey="leveltext" inherits="GameFontHighlight" text="10" setAllPoints="true" FontHeight="16">
+          <Anchors>
+            <Anchor point="CENTER" relativePoint="TOPLEFT">
+              <Offset x="39" y="-27"/>
+            </Anchor>
+          </Anchors>
+        </FontString>
+        <FontString name="$parent_HP_text_Percent" parentKey="hppercent" inherits="GameFontHighlight" text="100" setAllPoints="true" FontHeight="16">
+          <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER">
+              <Offset x="43" y="1"/>
+            </Anchor>
+          </Anchors>
+          <Color a="1" r="0" g="1" b="1"/>
+        </FontString>
+        <FontString name="$parent_HP_text" parentKey="hp" inherits="GameFontHighlight" text="100" setAllPoints="true">
+          <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER"><Offset x="-43" y="1"/></Anchor>
+            
+          </Anchors>
+          <Color a="1" r="1" g="0" b="1"/>
+        </FontString>
+        <FontString name="$parent_POWER_text" parentKey="mp" inherits="GameFontHighlight" text="100" setAllPoints="true">
+          <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER"><Offset x="130" y="1"/></Anchor>
+            
+          </Anchors>
+          <Color a="1" r="0" g="1" b="1"/>
+        </FontString>
+      </Layer>
+    </Layers>
+    <Scripts>
+      <OnLoad>
+self:RegisterEvent("PLAYER_LEVEL_UP")
+self:RegisterEvent("UNIT_LEVEL")
+self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+self:RegisterEvent("UNIT_HEALTH")
+self:RegisterEvent("UNIT_POWER")
+
+</OnLoad>
+      <OnEvent>
+self.leveltext:SetText(UnitLevel("player"))
+
+local health = UnitHealth("player")
+self.hppercent:SetText((math.ceil((health/UnitHealthMax("player")*1000))/10).."%")
+if health &gt; 1e6 then
+	self.hp:SetText(((math.ceil(health/100000))/10+0.0).."M")
+elseif health &gt; 1e3 then
+	self.hp:SetText(((math.ceil(health/100))/10+0.0).."K")
+else
+	self.hp:SetText(health)
+end
+
+local power = UnitPower("player")
+
+if power &gt; 150 then
+	self.mp:SetText((math.ceil((power/UnitPowerMax("player")*1000))/10))
+else
+	self.mp:SetText(power)
+end
+</OnEvent>
+    </Scripts>
+  </Frame>
+  <StatusBar name="tPlayerFrameHealthBar" parent="tPlayerFrame" enableMouse="false" minvalue="1" frameStrata="LOW" maxvalue="100" defaultvalue="50">
+    <BarTexture file="Interface\AddOns\tDD_UnitFrame2\media\steel"/>
+    <BarColor a="0.7" r="1" g="0.3" b="0.4"/>
+    <Size>
+      <AbsDimension x="250" y="22"/>
+    </Size>
+    <Anchors>
+      <Anchor point="LEFT" relativePoint="LEFT">
+        <Offset x="117" y="0"/>
+      </Anchor>
+      <Anchor point="RIGHT" relativePoint="RIGHT">
+        <Offset x="-36" y="0"/>
+      </Anchor>
+      <Anchor point="TOP" relativePoint="TOP">
+        <Offset x="0" y="-48"/>
+      </Anchor>
+    </Anchors>
+    <Scripts>
+      <OnLoad>
+self:RegisterEvent("UNIT_HEALTH")
+self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+self:SetMinMaxValues(0,UnitHealthMax("player"))
+self:SetValue(UnitHealth("player"))
+
+
+</OnLoad>
+      <OnEvent>
+local health = UnitHealth("player")
+self:SetMinMaxValues(0,UnitHealthMax("player"))
+self:SetValue(health)
+
+</OnEvent>
+    </Scripts>
+  </StatusBar>
+  <StatusBar name="tPlayerFramePowerBar" parent="tPlayerFrame" minvalue="1" maxvalue="100" frameStrata="LOW" defaultvalue="50">
+    <BarTexture file="Interface\AddOns\tDD_UnitFrame2\media\steel"/>
+    <BarColor a="0.8" r="0.6" g="1" b="1"/>
+    <Size>
+      <AbsDimension x="250" y="5"/>
+    </Size>
+    <Anchors>
+      <Anchor point="LEFT" relativePoint="LEFT">
+        <Offset x="126" y="0"/>
+      </Anchor>
+      <Anchor point="RIGHT" relativePoint="RIGHT">
+        <Offset x="-51" y="0"/>
+      </Anchor>
+      <Anchor point="BOTTOM" relativePoint="BOTTOM">
+        <Offset x="0" y="38"/>
+      </Anchor>
+    </Anchors>
+    <Scripts>
+      <OnLoad>
+self:RegisterEvent("UNIT_POWER")
+self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+self:SetMinMaxValues(0,select(1,UnitPowerMax("player")))
+self:SetValue(UnitPower("player"))
+
+
+</OnLoad>
+      <OnEvent>
+self:SetMinMaxValues(0,select(1,UnitPowerMax("player")))
+local power = UnitPower("player")
+self:SetValue(power)
+
+</OnEvent>
+    </Scripts>
+  </StatusBar>
+  <StatusBar name="tPlayerFrameExtraBar" parent="tPlayerFrame" minvalue="1" maxvalue="100" frameStrata="LOW" defaultvalue="50">
+    <BarTexture file="Interface\AddOns\tDD_UnitFrame2\media\steel"/>
+    <BarColor a="1" r="1" g="1" b="1"/>
+    <Size>
+      <AbsDimension x="250" y="5"/>
+    </Size>
+    <Anchors>
+      <Anchor point="LEFT" relativePoint="LEFT">
+        <Offset x="126" y="0"/>
+      </Anchor>
+      <Anchor point="RIGHT" relativePoint="RIGHT">
+        <Offset x="-51" y="0"/>
+      </Anchor>
+      <Anchor point="BOTTOM" relativePoint="BOTTOM">
+        <Offset x="0" y="70"/>
+      </Anchor>
+    </Anchors>
+    <Scripts>
+      <OnLoad>
+self:RegisterEvent("UNIT_POWER")
+self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+function tGetPowerType()
+local spec = select(1,GetSpecializationInfo(GetSpecialization() or 1))
+local spec_table={}
+spec_table[266] = 15;
+spec_table[265] = 7;
+spec_table[267] = 14;
+spec_table[70] = 9;
+spec_table[65] = 9
+spec_table[66] = 9; 
+spec_table[258] = 13;
+spec_table[268] = 12;
+spec_table[269] = 12;
+spec_table[270] = 12;
+spec_table[102] = 8;
+spec_table[103] = 0;
+spec_table[104] = 0;
+
+if spec_table[spec] == nil then
+return UnitPowerType("player")
+end
+
+return spec_table[spec];
+
+end
+
+
+</OnLoad>
+      <OnEvent>
+      self.powertype = tGetPowerType()
+      if self.powertype == 8 then
+self:SetMinMaxValues(-select(1,UnitPowerMax("player",self.powertype)),select(1,UnitPowerMax("player",self.powertype)))
+else
+self:SetMinMaxValues(0,select(1,UnitPowerMax("player",self.powertype)))
+
+end
+local power = UnitPower("player",self.powertype)
+self:SetValue(power)
+</OnEvent>
+    </Scripts>
+  </StatusBar>
+  <PlayerModel name="tPlayerPortraits" frameStrata="LOW" parent="tPlayerFrame" frameLevel="1">
+    <Size>
+      <AbsDimension x="64" y="64"/>
+    </Size>
+    <Anchors>
+      <Anchor point="LEFT" relativePoint="LEFT">
+        <Offset>
+          <AbsDimension x="45" y="5"/>
+        </Offset>
+      </Anchor>
+    </Anchors>
+    <Scripts>
+    <OnLoad>
+    self:RegisterEvent("UNIT_MODEL_CHANGED")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD")
+    </OnLoad>
+    <OnEvent>
+			self:SetCamDistanceScale(1)
+			self:SetPortraitZoom(0.95)
+			self:SetPosition(0,0,-0.05)
+			self:ClearModel()
+			self:SetUnit("player");
+    </OnEvent>
+      <OnShow>
+
+		</OnShow>
+    </Scripts>
+  </PlayerModel>
+</Ui>

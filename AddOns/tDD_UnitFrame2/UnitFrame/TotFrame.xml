@@ -1,0 +1,185 @@
+<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">
+  <Button name="tTotFrame" parent="UIParent" resizable="false" enableMouse="true" movable="true" frameStrata="LOW" inherits="SecureUnitButtonTemplate">
+    <Size>
+      <AbsDimension x="200" y="60"/>
+    </Size>
+    <Anchors>
+      <Anchor point="CENTER" relativePoint="CENTER">
+        <Offset x="90" y="-330"/>
+      </Anchor>
+    </Anchors>
+    <Layers>
+      <Layer level="BACKGROUND">
+        <Texture name="$parentBackground" parentKey="Background" file="Interface\AddOns\tDD_UnitFrame2\media\tot_bg">
+        <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER">
+              <Offset x="0" y="0"/>
+            </Anchor>
+          </Anchors>
+        </Texture>
+      </Layer>
+    </Layers>
+    <Scripts>
+      <OnLoad>
+	  self:RegisterForClicks("AnyUp")
+self:RegisterForDrag("LeftButton","RightButton","MiddleButton")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+self:RegisterEvent("UNIT_TARGET")
+self:RegisterEvent("PLAYER_REGEN_ENABLED")
+self:SetAttribute('*type1', 'target')
+self:SetAttribute('unit','targettarget')
+self.togglemenu = function() ToggleDropDownMenu(1, nil, TotFrameDropDown, "tTotFrame", 120, 10) end
+self:SetAttribute('*type2', 'togglemenu')
+RegisterStateDriver(self, "visibility", "[@targettarget,exists] show; hide")
+</OnLoad>
+      <OnEvent></OnEvent>
+      <OnUpdate></OnUpdate>
+
+      <OnDragStart>
+if button == "LeftButton" then
+	self:StartMoving()
+elseif button == "RightButton" then
+	ToggleDropDownMenu(1, nil, TotFrameDropDown, "tTotFrame", 120, 10);
+end
+
+</OnDragStart>
+      <OnDragStop>
+self:StopMovingOrSizing();
+
+</OnDragStop>
+    </Scripts>
+  </Button>
+  <Frame name="tTotFrameButton" parent="tTotFrame" resizable="false" enableMouse="false" movable="true" inherits="SecureUnitButtonTemplate">
+    <Size>
+      <AbsDimension x="200" y="60"/>
+    </Size>
+    <Anchors>
+      <Anchor point="CENTER" relativePoint="CENTER">
+        <Offset x="0" y="0"/>
+      </Anchor>
+    </Anchors>
+    <Layers>
+      <Layer level="BACKGROUND"></Layer>
+      <Layer level="ARKWORK" textureSubLevel="5">
+        <Texture name="$parentOverlay" parentKey="Overlay" file="Interface\AddOns\tDD_UnitFrame2\media\tot_tot">
+
+        <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER">
+              <Offset x="0" y="0"/>
+            </Anchor>
+          </Anchors>
+        </Texture>
+      </Layer>
+      <Layer level="LOW">
+        <FontString name="$parentLeveltext" parentKey="leveltext" inherits="GameFontHighlight" text="10" setAllPoints="true" FontHeight="16">
+          <Anchors>
+            <Anchor point="CENTER" relativePoint="BOTTOMLEFT">
+              <Offset x="79" y="13"/>
+            </Anchor>
+          </Anchors>
+        </FontString>
+        <FontString name="$parentUnitName" parentKey="unitname" inherits="GameFontHighlight" text="10" setAllPoints="true" FontHeight="16">
+          <Anchors>
+            <Anchor point="TOP" relativePoint="TOP">
+              <Offset x="20" y="0"/>
+            </Anchor>
+          </Anchors>
+        </FontString>
+        <FontString name="$parent_HP_text_Percent" parentKey="hppercent" inherits="GameFontHighlight" text="100" setAllPoints="true" FontHeight="16">
+          <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER">
+              <Offset x="20" y="4"/>
+            </Anchor>
+          </Anchors>
+          <Color a="1" r="0" g="1" b="1"/>
+        </FontString>
+      </Layer>
+    </Layers>
+    <Scripts>
+      <OnLoad>
+self:RegisterEvent("UNIT_LEVEL")
+self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+self:RegisterEvent("UNIT_TARGET")
+self:RegisterEvent("UNIT_HEALTH")
+self:RegisterEvent("UNIT_POWER")
+
+</OnLoad>
+      <OnEvent>
+      if UnitExists("targettarget") then
+self.leveltext:SetText(UnitLevel("targettarget"))
+
+local health = UnitHealth("targettarget")
+self.hppercent:SetText((math.ceil((health/UnitHealthMax("targettarget")*1000))/10).."%")
+self.unitname:SetText(UnitName("targettarget"))
+end
+</OnEvent>
+    </Scripts>
+  </Frame>
+  <StatusBar name="tTotFrameHealthBar" parent="tTotFrame" enableMouse="false" minvalue="1" frameStrata="LOW" maxvalue="100" defaultvalue="50">
+    <BarTexture file="Interface\AddOns\tDD_UnitFrame2\media\steel"/>
+    <BarColor a="0.7" r="1" g="0.3" b="0.4"/>
+    <Size>
+      <AbsDimension x="250" y="16"/>
+    </Size>
+    <Anchors>
+      <Anchor point="LEFT" relativePoint="LEFT">
+        <Offset x="80" y="0"/>
+      </Anchor>
+      <Anchor point="RIGHT" relativePoint="RIGHT">
+        <Offset x="-36" y="0"/>
+      </Anchor>
+      <Anchor point="TOP" relativePoint="TOP">
+        <Offset x="0" y="-21"/>
+      </Anchor>
+    </Anchors>
+    <Scripts>
+      <OnLoad>
+self:RegisterEvent("UNIT_HEALTH")
+self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+self:RegisterEvent("UNIT_TARGET")
+self:SetMinMaxValues(0,UnitHealthMax("targettarget"))
+self:SetValue(UnitHealth("targettarget"))
+
+
+</OnLoad>
+      <OnEvent>
+           if UnitExists("targettarget") then
+local health = UnitHealth("targettarget")
+self:SetMinMaxValues(0,UnitHealthMax("targettarget"))
+self:SetValue(health)
+
+end
+</OnEvent>
+    </Scripts>
+  </StatusBar>
+  <PlayerModel name="tTotPortraits" frameStrata="LOW" parent="tTotFrame" frameLevel="1">
+    <Size>
+      <AbsDimension x="32" y="32"/>
+    </Size>
+    <Anchors>
+      <Anchor point="LEFT" relativePoint="LEFT">
+        <Offset>
+          <AbsDimension x="35" y="0"/>
+        </Offset>
+      </Anchor>
+    </Anchors>
+    <Scripts>
+    <OnLoad>
+    self:RegisterEvent("UNIT_MODEL_CHANGED")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD")
+    self:RegisterEvent("UNIT_TARGET")
+    </OnLoad>
+    <OnEvent>
+         if UnitExists("targettarget") then
+			self:SetCamDistanceScale(1)
+			self:SetPortraitZoom(1)
+			self:SetPosition(0,0,0)
+			self:ClearModel()
+			self:SetUnit("targettarget");
+	end
+    </OnEvent>
+    </Scripts>
+  </PlayerModel>
+</Ui>

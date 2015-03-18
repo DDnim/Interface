@@ -1,0 +1,16 @@
+## Interface: 60000
+## Author: BN_ASIA Tushu#3421
+## Notes: Classic Unit Frame Mod
+## Version: v2.0.16 beta
+
+
+lib/oUF_blizzard.lua
+UnitFrame/PlayerFrame.xml
+UnitFrame/TargetFrame.xml
+UnitFrame/FocusFrame.xml
+UnitFrame/PetFrame.xml
+UnitFrame/TotFrame.xml
+UnitFrame/BossFrame.xml
+tDD_UnitFrame2.lua
+
+

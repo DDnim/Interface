@@ -1,0 +1,14 @@
+## Interface: 50001
+## Author: Tushu-TW
+## Notes: Lib
+## Version: v0.1
+## SavedVariables: ˆD•ø-TW-†À×¸êË¹
+
+--cfg.lua
+--miniMap\miniMap.lua
+tBar\micromenu.lua
+tBar\tBar.lua
+
+--Bottom\Bottom.lua
+--tTalent\tTalent.lua
+tTest.lua

@@ -1,0 +1,292 @@
+<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">
+  <Button name="tFocusFrame" parent="UIParent" resizable="false" enableMouse="true" movable="false" frameStrata="LOW" inherits="SecureUnitButtonTemplate">
+    <Size>
+      <AbsDimension x="373.76" y="115.2"/>
+    </Size>
+    <Anchors>
+      <Anchor point="CENTER" relativePoint="CENTER">
+        <Offset x="220" y="-180"/>
+      </Anchor>
+    </Anchors>
+    <Layers>
+      <Layer level="BACKGROUND">
+        <Texture name="$parentBackground" parentKey="Background" file="Interface\AddOns\tDD_UnitFrame2\media\player_bg">
+        <TexCoords top="0" left="1.0" bottom="1.0" right="0"/>
+        <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER">
+              <Offset x="0" y="0"/>
+            </Anchor>
+          </Anchors>
+        </Texture>
+      </Layer>
+    </Layers>
+    <Scripts>
+      <OnLoad>
+	  self:RegisterForClicks("AnyUp")
+self:RegisterForDrag("LeftButton","RightButton","MiddleButton")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+self:RegisterEvent("PLAYER_FOCUS_CHANGED")
+self:RegisterEvent("PLAYER_REGEN_ENABLED")
+
+self:SetAttribute('*type1', 'target')
+self:SetAttribute('unit','focus')
+self.togglemenu = function() ToggleDropDownMenu(1, nil, FocusFrameDropDown, "tFocusFrame", 120, 10) end
+self:SetAttribute('*type2', 'togglemenu')
+RegisterStateDriver(self, "visibility", "[@focus,exists] show; hide")
+</OnLoad>
+      <OnEvent></OnEvent>
+      <OnUpdate></OnUpdate>
+
+      <OnDragStart>
+if button == "LeftButton" then
+	self:StartMoving()
+elseif button == "RightButton" then
+	ToggleDropDownMenu(1, nil, FocusFrameDropDown, "tFocusFrame", 120, 10);
+end
+
+</OnDragStart>
+      <OnDragStop>
+self:StopMovingOrSizing();
+
+</OnDragStop>
+    </Scripts>
+  </Button>
+  <Frame name="tFocusFrameButton" parent="tFocusFrame" resizable="false" enableMouse="false" movable="true" inherits="SecureUnitButtonTemplate">
+    <Size>
+      <AbsDimension x="373" y="115.2"/>
+    </Size>
+    <Anchors>
+      <Anchor point="CENTER" relativePoint="CENTER">
+        <Offset x="0" y="0"/>
+      </Anchor>
+    </Anchors>
+    <Layers>
+      <Layer level="BACKGROUND"></Layer>
+      <Layer level="ARKWORK" textureSubLevel="5">
+        <Texture name="$parentOverlay" parentKey="Overlay" file="Interface\AddOns\tDD_UnitFrame2\media\target_target">
+        <TexCoords top="0" left="1.0" bottom="1.0" right="0"/>
+        <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER">
+              <Offset x="0" y="0"/>
+            </Anchor>
+          </Anchors>
+        </Texture>
+      </Layer>
+      <Layer level="LOW">
+        <FontString name="$parentLeveltext" parentKey="leveltext" inherits="GameFontHighlight" text="10" setAllPoints="true" FontHeight="16">
+          <Anchors>
+            <Anchor point="CENTER" relativePoint="BOTTOMRIGHT">
+              <Offset x="-33" y="39"/>
+            </Anchor>
+          </Anchors>
+        </FontString>
+                <FontString name="$parentUnitName" parentKey="unitname" inherits="GameFontHighlight" text="10" setAllPoints="true" FontHeight="16">
+          <Anchors>
+            <Anchor point="TOP" relativePoint="TOP">
+              <Offset x="-40" y="-18"/>
+            </Anchor>
+          </Anchors>
+        </FontString>
+               <FontString name="$parent_HP_text_Percent" parentKey="hppercent" inherits="GameFontHighlight" text="100" setAllPoints="true" FontHeight="16">
+          <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER">
+              <Offset x="-43" y="1"/>
+            </Anchor>
+          </Anchors>
+          <Color a="1" r="0" g="1" b="1"/>
+        </FontString>
+        <FontString name="$parent_HP_text" parentKey="hp" inherits="GameFontHighlight" text="100" setAllPoints="true">
+          <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER"><Offset x="43" y="1"/></Anchor>
+            
+          </Anchors>
+          <Color a="1" r="1" g="0" b="1"/>
+        </FontString>
+        <FontString name="$parent_POWER_text" parentKey="mp" inherits="GameFontHighlight" text="100" setAllPoints="true">
+          <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER"><Offset x="-130" y="1"/></Anchor>
+            
+          </Anchors>
+          <Color a="1" r="0" g="1" b="1"/>
+        </FontString>
+      </Layer>
+    </Layers>
+    <Scripts>
+      <OnLoad>
+self:RegisterEvent("UNIT_LEVEL")
+self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+self:RegisterEvent("PLAYER_FOCUS_CHANGED")
+self:RegisterEvent("UNIT_HEALTH")
+self:RegisterEvent("UNIT_POWER")
+
+</OnLoad>
+      <OnEvent>
+      if UnitExists("focus") then
+self.leveltext:SetText(UnitLevel("focus"))
+
+local health = UnitHealth("focus")
+self.hppercent:SetText((math.ceil((health/UnitHealthMax("focus")*1000))/10).."%")
+if health &gt; 1e6 then
+	self.hp:SetText(((math.ceil(health/100000))/10+0.0).."M")
+elseif health &gt; 1e3 then
+	self.hp:SetText(((math.ceil(health/100))/10+0.0).."K")
+else
+	self.hp:SetText(health)
+end
+
+local power = UnitPower("focus")
+
+if power &gt; 150 then
+	self.mp:SetText((math.ceil((power/UnitPowerMax("focus")*1000))/10))
+else
+	self.mp:SetText(power)
+end
+
+self.unitname:SetText(UnitName("focus"))
+
+end
+</OnEvent>
+    </Scripts>
+  </Frame>
+  <StatusBar name="tFocusFrameHealthBar" parent="tFocusFrame" enableMouse="false" minvalue="1" frameStrata="LOW" maxvalue="100" defaultvalue="50">
+    <BarTexture file="Interface\AddOns\tDD_UnitFrame2\media\steel"/>
+    <BarColor a="0.7" r="1" g="0.3" b="0.4"/>
+    <Size>
+      <AbsDimension x="250" y="22"/>
+    </Size>
+    <Anchors>
+      <Anchor point="LEFT" relativePoint="LEFT">
+        <Offset x="36" y="0"/>
+      </Anchor>
+      <Anchor point="RIGHT" relativePoint="RIGHT">
+        <Offset x="-117" y="0"/>
+      </Anchor>
+      <Anchor point="TOP" relativePoint="TOP">
+        <Offset x="0" y="-48"/>
+      </Anchor>
+    </Anchors>
+    <Scripts>
+      <OnLoad>
+self:RegisterEvent("UNIT_HEALTH")
+self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+self:RegisterEvent("PLAYER_FOCUS_CHANGED")
+self:SetMinMaxValues(0,UnitHealthMax("focus"))
+self:SetValue(UnitHealth("focus"))
+
+
+</OnLoad>
+      <OnEvent>
+           if UnitExists("focus") then
+local health = UnitHealth("focus")
+self:SetMinMaxValues(0,UnitHealthMax("focus"))
+self:SetValue(health)
+end
+</OnEvent>
+    </Scripts>
+  </StatusBar>
+  <StatusBar name="tFocusFramePowerBar" parent="tFocusFrame" minvalue="1" maxvalue="100" frameStrata="LOW" defaultvalue="50">
+    <BarTexture file="Interface\AddOns\tDD_UnitFrame2\media\steel"/>
+    <BarColor a="0.8" r="0.6" g="1" b="1"/>
+    <Size>
+      <AbsDimension x="250" y="5"/>
+    </Size>
+    <Anchors>
+      <Anchor point="LEFT" relativePoint="LEFT">
+        <Offset x="51" y="0"/>
+      </Anchor>
+      <Anchor point="RIGHT" relativePoint="RIGHT">
+        <Offset x="-126" y="0"/>
+      </Anchor>
+      <Anchor point="BOTTOM" relativePoint="BOTTOM">
+        <Offset x="0" y="38"/>
+      </Anchor>
+    </Anchors>
+    <Scripts>
+      <OnLoad>
+self:RegisterEvent("UNIT_POWER")
+self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+self:RegisterEvent("PLAYER_FOCUS_CHANGED")
+self:SetMinMaxValues(0,select(1,UnitPowerMax("focus")))
+self:SetValue(UnitPower("focus"))
+
+
+</OnLoad>
+      <OnEvent>
+           if UnitExists("focus") then
+self:SetMinMaxValues(0,select(1,UnitPowerMax("focus")))
+local power = UnitPower("focus")
+self:SetValue(power)
+end
+
+</OnEvent>
+    </Scripts>
+  </StatusBar>
+  <StatusBar name="tFocusFrameExtraBar" parent="tFocusFrame" minvalue="1" maxvalue="100" frameStrata="LOW" defaultvalue="50">
+    <BarTexture file="Interface\AddOns\tDD_UnitFrame2\media\steel"/>
+    <BarColor a="0.8" r="0.6" g="1" b="1"/>
+    <Size>
+      <AbsDimension x="250" y="5"/>
+    </Size>
+    <Anchors>
+      <Anchor point="LEFT" relativePoint="LEFT">
+        <Offset x="51" y="0"/>
+      </Anchor>
+      <Anchor point="RIGHT" relativePoint="RIGHT">
+        <Offset x="-126" y="0"/>
+      </Anchor>
+      <Anchor point="BOTTOM" relativePoint="BOTTOM">
+        <Offset x="0" y="70"/>
+      </Anchor>
+    </Anchors>
+    <Scripts>
+      <OnLoad>
+self:RegisterEvent("UNIT_POWER")
+self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+self:RegisterEvent("PLAYER_FOCUS_CHANGED")
+self:SetMinMaxValues(0,select(1,UnitPowerMax("focus")))
+self:SetValue(UnitPower("focus"))
+
+
+</OnLoad>
+      <OnEvent>
+           if UnitExists("focus") then
+self:SetMinMaxValues(0,select(1,UnitPowerMax("focus")))
+local power = UnitPower("focus")
+self:SetValue(power)
+end
+</OnEvent>
+    </Scripts>
+  </StatusBar>
+  <PlayerModel name="tFocusPortraits" frameStrata="LOW" parent="tFocusFrame" frameLevel="1">
+    <Size>
+      <AbsDimension x="64" y="64"/>
+    </Size>
+    <Anchors>
+      <Anchor point="RIGHT" relativePoint="RIGHT">
+        <Offset>
+          <AbsDimension x="-45" y="5"/>
+        </Offset>
+      </Anchor>
+    </Anchors>
+    <Scripts>
+    <OnLoad>
+    self:RegisterEvent("UNIT_MODEL_CHANGED")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD")
+    self:RegisterEvent("PLAYER_FOCUS_CHANGED")
+    </OnLoad>
+    <OnEvent>
+         if UnitExists("focus") then
+			self:SetCamDistanceScale(1)
+			self:SetPortraitZoom(0.95)
+			self:SetPosition(0,0,-0.05)
+			self:ClearModel()
+			self:SetUnit("focus");
+	end
+    </OnEvent>
+    </Scripts>
+  </PlayerModel>
+</Ui>
