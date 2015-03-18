@@ -1,0 +1,147 @@
+<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">
+   <Frame name = "ExtrafAurasFrame1" parent="UIParent" resizable="false" enableMouse="false" movable="false" frameStrata="LOW">
+		<Size>
+		    <AbsDimension x="400" y="200"/>
+		</Size>
+   		<Anchors>
+      		<Anchor point="CENTER" relativePoint="CENTER">
+        		<Offset x="0" y="-250"/>
+      		</Anchor>
+    	</Anchors>
+		<Scripts>
+			<OnLoad>
+			tAurasExtra_Onload(self)
+			
+			
+			 </OnLoad>
+
+			<OnEvent>
+			self.buffers = tExtraBuffer1 or {}
+			tExtra_update(self,self.buffers)
+			
+
+			</OnEvent>
+	  </Scripts>
+	</Frame>  
+	
+	 <Frame name = "ExtrafAurasFrame2" parent="UIParent" resizable="false" enableMouse="false" movable="false" frameStrata="LOW">
+		<Size>
+		    <AbsDimension x="400" y="200"/>
+		</Size>
+   		<Anchors>
+      		<Anchor point="CENTER" relativePoint="CENTER">
+        		<Offset x="0" y="-300"/>
+      		</Anchor>
+    	</Anchors>
+		<Scripts>
+			<OnLoad>
+			tAurasExtra_Onload(self)
+			
+			
+			 </OnLoad>
+
+			<OnEvent>
+			self.buffers = tExtraBuffer2 or {}
+			tExtra_update(self,self.buffers)
+			
+
+			</OnEvent>
+	  </Scripts>
+	</Frame>  
+	
+	<Frame name = "ExtrafAurasFrame3" parent="UIParent" resizable="false" enableMouse="false" movable="false" frameStrata="LOW">
+		<Size>
+		    <AbsDimension x="200" y="200"/>
+		</Size>
+   		<Anchors>
+      		<Anchor point="CENTER" relativePoint="CENTER">
+        		<Offset x="100" y="0"/>
+      		</Anchor>
+    	</Anchors>
+		<Scripts>
+			<OnLoad>
+			tAurasExtra_Onload(self)
+			
+			
+			 </OnLoad>
+
+			<OnEvent>
+			self.buffers = tExtraBuffer3 or {}
+			tExtra_update(self,self.buffers)
+			
+
+			</OnEvent>
+	  </Scripts>
+	</Frame>  
+	
+	
+	 <Frame name = "ExtrafAurasFrame4" parent="UIParent" resizable="false" enableMouse="false" movable="false" frameStrata="LOW">
+		<Size>
+		    <AbsDimension x="65" y="200"/>
+		</Size>
+   		<Anchors>
+      		<Anchor point="CENTER" relativePoint="CENTER">
+        		<Offset x="-100" y="0"/>
+      		</Anchor>
+    	</Anchors>
+		<Scripts>
+			<OnLoad>
+			tAurasExtra_Onload(self)
+			
+			
+			 </OnLoad>
+
+			<OnEvent>
+			self.buffers = tExtraBuffer4 or {}
+			tExtra_update(self,self.buffers)
+			
+
+			</OnEvent>
+	  </Scripts>
+	</Frame>  
+	
+	<!-- <Frame name = "tDBMAurasFrame" parent="UIParent" resizable="false" enableMouse="false" movable="false" frameStrata="LOW">
+		<Size>
+		    <AbsDimension x="400" y="200"/>
+		</Size>
+   		<Anchors>
+      		<Anchor point="CENTER" relativePoint="CENTER">
+        		<Offset x="0" y="200"/>
+      		</Anchor>
+    	</Anchors>
+		<Scripts>
+			<OnLoad>
+			tAurasExtra_Onload(self)
+			self:RegisterEvent("UNIT_ATTACK")
+			 </OnLoad>
+
+			<OnEvent>
+			local num = 0
+			local b
+			if DBM then
+				for i=1,20 do
+					if _G['tDBM'..i] then
+						_G['tDBM'..i]:Hide()
+					end
+				end
+					
+				for b in DBM.Bars:GetBarIterator() do
+					num = num + 1
+					local bar
+
+					bar =_G["tDBM"..num] or CreateFrame("Frame", "tDBM"..num,self,"tAuraDBMTemplate");
+					bar.expirationTime = b.lastUpdate - (b.totalTime - b.timer)
+					bar.duration = b.totalTime
+					bar.id = b.id
+					bar.frame = b.frame
+					BUTTON_SIZE = 64
+					bar:SetSize(BUTTON_SIZE,BUTTON_SIZE)
+					bar:SetID()
+					bar:SetPoint("TOPLEFT",BUTTON_SIZE*((num-1)%(math.floor(self:GetWidth()/BUTTON_SIZE))),-BUTTON_SIZE*math.floor((num-1)/(math.floor(self:GetWidth()/BUTTON_SIZE))))
+				end
+			end
+
+			</OnEvent>
+	  </Scripts>
+	</Frame>   -->
+</Ui>

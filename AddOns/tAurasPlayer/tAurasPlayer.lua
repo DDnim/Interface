@@ -1,0 +1,2 @@
+BuffFrame:UnregisterAllEvents()
+BuffFrame:Hide()

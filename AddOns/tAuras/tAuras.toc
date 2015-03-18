@@ -1,0 +1,8 @@
+## Interface: 61000
+## Author: BN_ASIA Tushu#3421
+## Notes: Classic Auras Frame Mod
+## Version: v1.0
+
+UnitFrame/Template.lua
+UnitFrame/Template.xml
+tAuras.lua

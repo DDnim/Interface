@@ -1,0 +1,60 @@
+<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">
+   <Script file="TargetAuras.lua"/>     
+        
+	<Frame name = "tTargetBuffFrame" parent="UIParent" resizable="false" enableMouse="false" movable="false" frameStrata="LOW">
+		<Size>
+		    <AbsDimension x="128" y="200"/>
+		</Size>
+   		<Anchors>
+      		<Anchor point="TOPLEFT" relativePoint="CENTER">
+        		<Offset x="180" y="-310"/>
+      		</Anchor>
+    	</Anchors>
+		<Scripts>
+			<OnLoad>
+				tAurasOther_Onload(self)
+				print(2)
+				CreateFrame('Frame',self:GetName()..'Moveable',self,'tAuraFrameMoveTemplate')
+				
+				_G[self:GetName()..'Moveable']:SetAllPoints(self)
+				print(5)
+			</OnLoad>
+			  
+			<OnEvent>
+				if (... == 'target') or (event == 'PLAYER_TARGET_CHANGED')then
+					if UnitGroupRolesAssigned('player') == 'HEALER'then
+						tAurasTargetBottom(self,"target","HARMFUL")
+					else
+						tAurasTargetBottom(self,"target","HELPFUL")
+					end
+				end
+			</OnEvent>
+	  </Scripts>
+	</Frame>  
+	
+	<Frame name = "tTargetDebuffFrame" parent="UIParent" resizable="false" enableMouse="false" movable="false" frameStrata="LOW">
+		<Size>
+		    <AbsDimension x="192" y="200"/>
+		</Size>
+   		<Anchors>
+      		<Anchor point="BOTTOMLEFT" relativePoint="CENTER">
+        		<Offset x="80" y="-240"/>
+      		</Anchor>
+    	</Anchors>
+		<Scripts>
+			<OnLoad>
+			tAurasOther_Onload(self)
+			  </OnLoad>
+
+			<OnEvent>
+				if (... == 'target') or (event == 'PLAYER_TARGET_CHANGED')then
+					if UnitGroupRolesAssigned('player') == 'HEALER' then
+						tAurasTargetTop(self,"target","HELPFUL")
+					else
+						tAurasTargetTop(self,"target","HARMFUL")
+					end
+				end
+			</OnEvent>
+	  </Scripts>
+	</Frame>  
+</Ui>

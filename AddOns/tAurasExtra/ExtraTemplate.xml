@@ -1,0 +1,71 @@
+<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">  
+<Frame name="tAuraExtraTemplate" virtual="true" frameStrata="LOW" enableMouse="false">
+                <Size x="32" y="32"/>
+                <Layers>
+					<Layer level="BACKGROUND">
+                		<Texture name="$parentIcon" parentKey="icon"></Texture>
+                	</Layer>
+                	<Layer level="BORDER">
+                		<Texture name="$parentBorder1" parentKey="border1" file = "Interface\AddOns\tAuras\media\gloss_grey" setAllPoints="true">
+                		 <Color r="0" g="0" b="0" a="1.0"/>
+                		</Texture>
+                	</Layer>
+                	<Layer level="HIGH">
+                		<FontString name="$parentCount" parentKey="count" inherits="NumberFontNormalLarge" justifyH="RIGHT">
+                			<Anchors>
+					            <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+					              <Offset x="0" y="0"/>
+					            </Anchor>
+					        </Anchors>
+                		</FontString>
+					</Layer>
+				</Layers>
+				
+                              
+                <Scripts>
+	                <Onload>
+		                
+		                
+		                self.unit = nil
+		                self.filter = nil
+		               	self.id = nil
+		               	
+		               	self.cooldown = _G[self:GetName().."Cooldown"] or  CreateFrame("Cooldown", self:GetName().."Cooldown", self, "CooldownFrameTemplate")
+		                self.SetID = tSetIdExtra
+		                
+		                
+		                
+	                </Onload>
+                </Scripts>
+        </Frame>     
+        
+        <Frame name="tAuraDBMTemplate" virtual="true" frameStrata="LOW" enableMouse="false">
+                <Size x="32" y="32"/>
+                <Layers>
+					<Layer level="BACKGROUND">
+                		<Texture name="$parentIcon" parentKey="icon"></Texture>
+                	</Layer>
+                	<Layer level="BORDER">
+                		<Texture name="$parentBorder1" parentKey="border1" file = "Interface\AddOns\tAuras\media\gloss_grey" setAllPoints="true">
+                		 <Color r="0" g="0" b="0" a="1.0"/>
+                		</Texture>
+                	</Layer>
+                	<Layer level="HIGH">
+                		<FontString name="$parentCount" parentKey="count" inherits="NumberFontNormalLarge" justifyH="RIGHT">
+                			<Anchors>
+					            <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+					              <Offset x="0" y="0"/>
+					            </Anchor>
+					        </Anchors>
+                		</FontString>
+					</Layer>
+				</Layers>
+                <Scripts>
+	                <Onload>
+		               	self.id = nil
+		             	self.cooldown = _G[self:GetName().."Cooldown"] or  CreateFrame("Cooldown", self:GetName().."Cooldown", self, "CooldownFrameTemplate")
+		                self.SetID = tSetDBM
+	                </Onload>
+                </Scripts>
+        </Frame>     
+		</Ui>

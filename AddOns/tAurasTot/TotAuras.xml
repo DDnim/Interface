@@ -1,0 +1,32 @@
+<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">
+   
+	<Frame name = "tTotDebuffFrame" parent="UIParent" resizable="false" enableMouse="false" movable="false" frameStrata="LOW">
+		<Size>
+		    <AbsDimension x="65" y="200"/>
+		</Size>
+   		<Anchors>
+      		<Anchor point="TOPLEFT" relativePoint="CENTER">
+        		<Offset x="86" y="-350"/>
+      		</Anchor>
+    	</Anchors>
+		<Scripts>
+			<OnLoad>
+			tAurasOther_Onload(self)
+			  </OnLoad>
+
+			<OnEvent>
+			
+			tTotDebuff_update(self,"targettarget","HARMFUL")
+			for i = 1,6 do
+				temp = _G["tAruastargettargetHARMFUL"..i.."Cooldown"]
+				if temp ~= nil then
+					if not _G["tAruastargettargetHARMFUL"..i.."Cooldown"]:HasScript("OnShow") then
+						_G["tAruastargettargetHARMFUL"..i.."Cooldown"]:SetScript('OnHide',function()tTotDebuff_update(self,"targettarget","HARMFUL") end)
+					end
+				end
+			end
+
+			</OnEvent>
+	  </Scripts>
+	</Frame>  
+</Ui>

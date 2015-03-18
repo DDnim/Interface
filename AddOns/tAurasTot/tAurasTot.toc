@@ -1,0 +1,10 @@
+## Interface: 60100
+
+## RequiredDeps: tAuras
+## Author: BN_ASIA Tushu#3421
+## Notes: Classic Auras Frame Mod
+
+## Version: v0.1
+
+TotAuras.lua
+TotAuras.xml

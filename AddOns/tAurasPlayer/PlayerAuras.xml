@@ -1,0 +1,43 @@
+<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">
+   <Script file="PlayerAuras.lua"/>
+  <Frame name = "tPlayerBuffFrame" parent="UIParent" resizable="false" enableMouse="false" movable="false" frameStrata="LOW">
+  <Size>
+      <AbsDimension x="129" y="200"/>
+   </Size>
+
+
+   <Anchors>
+      <Anchor point="TOPLEFT" relativePoint="CENTER">
+        <Offset x="-300" y="-310"/>
+      </Anchor>
+    </Anchors>
+	<Scripts>
+      <OnLoad>
+	  	tPlayerBuffFrame_Onload(self)
+	  </OnLoad>
+	
+	<OnEvent>
+		tPlayerBuffFrame_update()
+	</OnEvent>
+	  </Scripts>
+	</Frame>
+	
+	  <Frame name = "tPlayerDebuffFrame" parent="UIParent" resizable="false" enableMouse="false" movable="false" frameStrata="LOW">
+		<Size>
+		    <AbsDimension x="192" y="200"/>
+		</Size>
+   		<Anchors>
+      		<Anchor point="BOTTOMLEFT" relativePoint="CENTER">
+        		<Offset x="-290" y="-240"/>
+      		</Anchor>
+    	</Anchors>
+		<Scripts>
+			<OnLoad>
+			  tPlayerBuffFrame_Onload(self)
+			  </OnLoad>
+			<OnEvent>
+			tAurasDebuff(self,"player","HARMFUL")
+			</OnEvent>
+	  </Scripts>
+	</Frame>  
+</Ui>

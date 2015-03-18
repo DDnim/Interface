@@ -1,0 +1,11 @@
+## Interface: 60100
+
+## RequiredDeps: tAuras
+## Author: BN_ASIA Tushu#3421
+## Notes: Classic Auras Frame Mod
+
+## Version: v0.92 beta
+
+PlayerAuras.lua
+PlayerAuras.xml
+tAurasPlayer.lua
