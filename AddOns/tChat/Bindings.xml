@@ -1,0 +1,41 @@
+<Bindings>
+  <Binding name="TOGGLE_TCHAT" runOnUp="true" description="Toggle tChatControl" header="WOWLUA">
+	    if ( keystate == "down" ) then
+			ns.tChatPanel:EnableKeyboard(false)
+            ns.tChatPanel:EnableKeyboard(true)
+			for _ = 1, NUM_CHAT_WINDOWS do
+				ns.tChatMask:EnableMouse(true)
+			end
+			tChatTip:SetText(WHISPER.." |Cffffff00R|R")
+			tChatTip:Hide()
+			tChatTip:Show()
+			<!-- ns.tChatFlag = true -->
+        else
+			if ns.tChatFlag == "GUILD" then
+				ChatFrame_OpenChat("/g ", chatFrame);
+			elseif ns.tChatFlag == "RAID" then
+				ChatFrame_OpenChat("/raid ", chatFrame);
+			elseif ns.tChatFlag == "PARTY" then
+				ChatFrame_OpenChat("/p ", chatFrame);
+			elseif ns.tChatFlag == "SAY" then
+				ChatFrame_OpenChat("/s ", chatFrame);
+			elseif ns.tChatFlag == "BG" then
+				ChatFrame_OpenChat("/bg ", chatFrame);
+			elseif ns.tChatFlag == "RAID_WARNING" then
+				ChatFrame_OpenChat("/rw ", chatFrame);
+			else
+				if ChatEdit_GetLastTellTarget() ~=nil then
+					ChatFrame_OpenChat("/r ", chatFrame);
+				end
+			end
+			ns.tChatTip:Hide()
+			ns.tChatFlag = nil
+			for _ = 1, NUM_CHAT_WINDOWS do
+				ns.tChatMask:EnableMouse(false)
+			end
+			ns.tChatPanel:EnableKeyboard(false)
+        end
+
+  </Binding>
+
+</Bindings>

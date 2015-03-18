@@ -1,0 +1,6 @@
+## Interface: 50400
+## Author: BN_ASIA Tushu#3421
+## Notes: Powerful & Quickly & light Chat tool
+## Version: v1.1
+
+tChat.lua
