@@ -1,4 +1,4 @@
-## Interface: 50400
+## Interface: 60100
 ## Author: BN_ASIA Tushu#3421
 ## Notes: Powerful & Quickly & light Chat tool
 ## Version: v1.1

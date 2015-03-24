@@ -1,4 +1,4 @@
-## Interface: 50400
+## Interface: 60100
 ## Version: 1.2.7
 ## Author: SinaC
 ## Credits: Elv, Starinnia, Puffina
