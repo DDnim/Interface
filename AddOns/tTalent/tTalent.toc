@@ -1,4 +1,4 @@
-## Interface: 60000
+## Interface: 60100
 ## Author: BN_ASIA Tushu#3421
 ## Notes: Talent Frame Art & Control
 ## Version: v1.2

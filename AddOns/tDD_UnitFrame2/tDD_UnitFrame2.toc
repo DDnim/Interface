@@ -1,4 +1,4 @@
-## Interface: 60000
+## Interface: 60100
 ## Author: BN_ASIA Tushu#3421
 ## Notes: Classic Unit Frame Mod
 ## Version: v2.0.16 beta
