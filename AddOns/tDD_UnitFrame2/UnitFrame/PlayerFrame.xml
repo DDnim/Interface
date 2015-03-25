@@ -29,7 +29,9 @@ self:SetAttribute('unit','player')
 self.togglemenu = function() ToggleDropDownMenu(1, nil, PlayerFrameDropDown, "tPlayerFrame", 120, 10) end
 self:SetAttribute('*type2', 'togglemenu')
 </OnLoad>
-      <OnEvent></OnEvent>
+      <OnEvent>
+	  
+	  </OnEvent>
       <OnUpdate></OnUpdate>
 
       <OnDragStart>
@@ -106,28 +108,39 @@ self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 self:RegisterEvent("PLAYER_ENTERING_WORLD")
 self:RegisterEvent("UNIT_HEALTH")
 self:RegisterEvent("UNIT_POWER")
-
+self:RegisterEvent("PLAYER_REGEN_ENABLED")
+self:RegisterEvent("PLAYER_REGEN_DISABLED")
 </OnLoad>
       <OnEvent>
-self.leveltext:SetText(UnitLevel("player"))
 
-local health = UnitHealth("player")
-self.hppercent:SetText((math.ceil((health/UnitHealthMax("player")*1000))/10).."%")
-if health &gt; 1e6 then
-	self.hp:SetText(((math.ceil(health/100000))/10+0.0).."M")
-elseif health &gt; 1e3 then
-	self.hp:SetText(((math.ceil(health/100))/10+0.0).."K")
-else
-	self.hp:SetText(health)
-end
+	  if event == "PLAYER_REGEN_ENABLED" then
+		self.Overlay:SetTexture("Interface\\AddOns\\tDD_UnitFrame2\\media\\player_player")
+		UIFrameFadeIn(self,1,0.4,1)
+	elseif event == "PLAYER_REGEN_DISABLED" then
+		self.Overlay:SetTexture("Interface\\AddOns\\tDD_UnitFrame2\\media\\player_player_high")
+		UIFrameFadeIn(self,1,0.4,1)
+	else
+		self.leveltext:SetText(UnitLevel("player"))
 
-local power = UnitPower("player")
+		local health = UnitHealth("player")
+		self.hppercent:SetText((math.ceil((health/UnitHealthMax("player")*1000))/10).."%")
+		if health &gt; 1e6 then
+			self.hp:SetText(((math.ceil(health/100000))/10+0.0).."M")
+		elseif health &gt; 1e3 then
+			self.hp:SetText(((math.ceil(health/100))/10+0.0).."K")
+		else
+			self.hp:SetText(health)
+		end
 
-if power &gt; 150 then
-	self.mp:SetText((math.ceil((power/UnitPowerMax("player")*1000))/10))
-else
-	self.mp:SetText(power)
-end
+		local power = UnitPower("player")
+
+		if power &gt; 150 then
+			self.mp:SetText((math.ceil((power/UnitPowerMax("player")*1000))/10))
+		else
+			self.mp:SetText(power)
+		end
+	end
+
 </OnEvent>
     </Scripts>
   </Frame>
@@ -202,7 +215,7 @@ self:SetValue(power)
     </Scripts>
   </StatusBar>
   <StatusBar name="tPlayerFrameExtraBar" parent="tPlayerFrame" minvalue="1" maxvalue="100" frameStrata="LOW" defaultvalue="50">
-    <BarTexture file="Interface\AddOns\tDD_UnitFrame2\media\steel"/>
+    <BarTexture file="Interface\AddOns\tDD_UnitFrame2\media\steel2"/>
     <BarColor a="1" r="1" g="1" b="1"/>
     <Size>
       <AbsDimension x="250" y="5"/>
@@ -251,15 +264,19 @@ end
 
 </OnLoad>
       <OnEvent>
-      self.powertype = tGetPowerType()
-      if self.powertype == 8 then
-self:SetMinMaxValues(-select(1,UnitPowerMax("player",self.powertype)),select(1,UnitPowerMax("player",self.powertype)))
+	  
+self.powertype = tGetPowerType()
+self.powermax = UnitPowerMax("player",self.powertype)
+if self.powertype == 8 then
+	self:SetMinMaxValues(-select(1,self.powermax),select(1,self.powermax))
 else
-self:SetMinMaxValues(0,select(1,UnitPowerMax("player",self.powertype)))
-
+	self:SetMinMaxValues(0,select(1,self.powermax))
 end
+
 local power = UnitPower("player",self.powertype)
+self:SetStatusBarColor(power/self.powermax, 0, 1)
 self:SetValue(power)
+
 </OnEvent>
     </Scripts>
   </StatusBar>

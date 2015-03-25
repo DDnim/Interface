@@ -127,6 +127,21 @@ self:RegisterEvent("UNIT_POWER")
 
 </OnLoad>
       <OnEvent>
+	  if event == "PLAYER_TARGET_CHANGED" then
+	  
+		  if UnitClassification("target") == "normal" then
+			self.Overlay:SetTexture("Interface\\AddOns\\tDD_UnitFrame2\\media\\target_target")
+		elseif UnitClassification("target") == "worldboss" then
+			self.Overlay:SetTexture("Interface\\AddOns\\tDD_UnitFrame2\\media\\target_boss")
+		elseif UnitClassification("target") == "elite" then
+			self.Overlay:SetTexture("Interface\\AddOns\\tDD_UnitFrame2\\media\\target_elite")
+		elseif UnitClassification("target") == "rare" or UnitClassification("target") == "rareelite"  then
+			self.Overlay:SetTexture("Interface\\AddOns\\tDD_UnitFrame2\\media\\target_rare_elite")
+		else
+			self.Overlay:SetTexture("Interface\\AddOns\\tDD_UnitFrame2\\media\\target_target")
+		end
+	end
+	  
       if UnitExists("target") then
 self.leveltext:SetText(UnitLevel("target"))
 

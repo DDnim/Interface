@@ -1,0 +1,213 @@
+<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">
+  <Button name="tMonitor" parent="UIParent" resizable="false" enableMouse="true" movable="true" frameStrata="LOW" inherits="SecureUnitButtonTemplate">
+    <Size>
+      <AbsDimension x="256" y="4"/>
+    </Size>
+    <Anchors>
+      <Anchor point="CENTER" relativePoint="CENTER">
+        <Offset x="0" y="-150"/>
+      </Anchor>
+    </Anchors>
+	
+    <Layers>
+      <Layer level="BACKGROUND">
+        <Texture name="$parentBackground1" parentKey="Background1">
+		<Color a="1" r="1" g="1" b="1"/>
+		<Size>
+			  <AbsDimension x="2" y="60"/>
+			</Size>
+			<Anchors>
+			  <Anchor point="CENTER" relativePoint="CENTER">
+				<Offset x="-70" y="-70"/>
+			  </Anchor>
+			</Anchors>
+        </Texture>
+      </Layer>
+	  <Layer level="LOW">
+        <FontString name="$parentPowertext" parentKey="powertext" font="Interface\AddOns\tMonitor\edo.ttf" text="10" setAllPoints="true">
+				  <FontHeight>
+			 <AbsValue val="28"/>
+		   </FontHeight>
+		   <Size>
+			  <AbsDimension x="100" y="50"/>
+			</Size>
+		  <Anchors>
+            <Anchor point="RIGHT" relativePoint="CENTER">
+              <Offset x="-80" y="-85"/>
+            </Anchor>
+          </Anchors>
+        </FontString>
+		
+		<Texture name="$parentPointer1" parentKey="pointer1" hidden="true">
+		<Color a="1" r="1" g="1" b="1"/>
+		<Size>
+			  <AbsDimension x="15" y="20"/>
+			</Size>
+			<Anchors>
+			  <Anchor point="CENTER" relativePoint="CENTER">
+				<Offset x="-133" y="-50"/>
+			  </Anchor>
+			</Anchors>
+        </Texture>
+		
+		<Texture name="$parentPointer2" parentKey="pointer2" hidden="true">
+		<Color a="1" r="1" g="1" b="1"/>
+		<Size>
+			  <AbsDimension x="15" y="20"/>
+			</Size>
+			<Anchors>
+			  <Anchor point="CENTER" relativePoint="CENTER">
+				<Offset x="-98" y="-50"/>
+			  </Anchor>
+			</Anchors>
+        </Texture>
+		
+		<Texture name="$parentPointer3" parentKey="pointer3" hidden="true">
+		<Color a="1" r="1" g="1" b="1"/>
+		<Size>
+			  <AbsDimension x="15" y="20"/>
+			</Size>
+			<Anchors>
+			  <Anchor point="CENTER" relativePoint="CENTER">
+				<Offset x="-62" y="-50"/>
+			  </Anchor>
+			</Anchors>
+        </Texture>
+		
+		<Texture name="$parentPointer4" parentKey="pointer4" hidden="true">
+		<Color a="1" r="1" g="1" b="1"/>
+		<Size>
+			  <AbsDimension x="15" y="20"/>
+			</Size>
+			<Anchors>
+			  <Anchor point="CENTER" relativePoint="CENTER">
+				<Offset x="-24" y="-50"/>
+			  </Anchor>
+			</Anchors>
+        </Texture>
+		
+		<Texture name="$parentPointer5" parentKey="pointer5" hidden="true">
+		<Color a="1" r="1" g="1" b="1"/>
+		<Size>
+			  <AbsDimension x="15" y="20"/>
+			</Size>
+			<Anchors>
+			  <Anchor point="CENTER" relativePoint="CENTER">
+				<Offset x="12" y="-50"/>
+			  </Anchor>
+			</Anchors>
+        </Texture>
+		
+		
+		</Layer>
+		
+		
+    </Layers>
+    <Scripts>
+ <OnLoad>
+ self:RegisterEvent("UNIT_POWER")
+ self:RegisterEvent("PLAYER_ENTERING_WORLD")
+ 
+ self:RegisterEvent("UNIT_POWER")
+self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+function tGetPowerType()
+local spec = select(1,GetSpecializationInfo(GetSpecialization() or 1))
+local spec_table={}
+spec_table[266] = 15;
+spec_table[265] = 7;
+spec_table[267] = 14;
+spec_table[70] = 9;
+spec_table[65] = 9
+spec_table[66] = 9; 
+spec_table[258] = 13;
+spec_table[268] = 12;
+spec_table[269] = 12;
+spec_table[270] = 12;
+spec_table[102] = 8;
+spec_table[103] = 0;
+spec_table[104] = 0;
+
+if spec_table[spec] == nil then
+return UnitPowerType("player")
+end
+
+return spec_table[spec];
+
+end
+ </OnLoad>
+ <OnEvent>
+	
+	self.powertext:SetJustifyH("RIGHT")
+	self.powertext:SetText((math.ceil((UnitPower("player")/UnitPowerMax("player")*1000))/10))
+	
+	self.powertype = tGetPowerType()
+	
+	self.mtpowermax = UnitPowerMax("player",self.powertype)
+	self.mtpower = UnitPower("player",self.powertype)
+	
+	
+	for i = 1,self.mtpower do
+		self["pointer"..i]:Show()
+	end
+	for i = self.mtpower+1,self.mtpowermax do
+		self["pointer"..i]:Hide()
+	end
+	
+	
+ </OnEvent>
+    </Scripts>
+  </Button>
+  
+  <StatusBar name="tMonitorPowerBar" enableMouse="false" minvalue="1" frameStrata="LOW" maxvalue="100" defaultvalue="50">
+    <BarTexture file="Interface\AddOns\tMonitor\123"/>
+    <Size>
+      <AbsDimension x="200" y="4"/>
+    </Size>
+    <Anchors>
+      <Anchor point="CENTER" relativePoint="CENTER">
+        <Offset x="0" y="-150"/>
+      </Anchor>
+    </Anchors>
+    <Scripts>
+      <OnLoad>
+self:RegisterEvent("UNIT_POWER")
+self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+self:RegisterEvent("PLAYER_ENTERING_WORLD")
+self:SetMinMaxValues(0,select(1,UnitPowerMax("player")))
+self:SetValue(UnitPower("player"))
+
+
+
+</OnLoad>
+      <OnEvent>
+self:SetMinMaxValues(0,select(1,UnitPowerMax("player")))
+local power = UnitPower("player")
+self:SetValue(power)
+
+
+</OnEvent>
+    </Scripts>
+  </StatusBar>
+<!--   <Button name="tPlayerFrame" parent="UIParent" resizable="false" enableMouse="true" movable="true" frameStrata="LOW" inherits="SecureUnitButtonTemplate">
+    <Size>
+      <AbsDimension x="256" y="4"/>
+    </Size>
+    <Anchors>
+      <Anchor point="CENTER" relativePoint="CENTER">
+        <Offset x="0" y="-150"/>
+      </Anchor>
+    </Anchors>
+    <Layers>
+      <Layer level="BACKGROUND">
+        <Texture name="$parentBackground" parentKey="Background" setAllPoints ="true" file="Interface\AddOns\tMonitor\123">
+        </Texture>
+      </Layer>
+	 
+    </Layers>
+    <Scripts>
+
+    </Scripts>
+  </Button>
+ -->
+</Ui>
