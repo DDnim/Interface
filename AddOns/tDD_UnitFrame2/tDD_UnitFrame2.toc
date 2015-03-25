@@ -1,7 +1,7 @@
 ## Interface: 60100
 ## Author: BN_ASIA Tushu#3421
 ## Notes: Classic Unit Frame Mod
-## Version: v2.0.16 beta
+## Version: v2.1.0 beta
 
 
 lib/oUF_blizzard.lua
