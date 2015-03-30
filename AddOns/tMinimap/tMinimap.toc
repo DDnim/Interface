@@ -1,7 +1,7 @@
 ## Interface: 60100
 ## Author: BN_ASIA Tushu#3421
 ## Notes: Minimap Art & Control
-## Version: v1.2
+## Version: v1.3
 ## SavedVariables: tMinimap
 
 miniMap.lua

@@ -65,14 +65,14 @@ local function StyleMap()
 			text = maxPlayers..'N'
 			color = {0, 0, 0}
 		 end
-	  elseif instanceType == 'raid' and dynamic then
-		 if difficulty == 14 or 3 or 4 then
-			text = maxPlayers..'N'
+	  elseif instanceType == 'raid' then
+		 if difficulty == 14 or difficulty ==3 or difficulty ==4 then
+			text = raidmem..'N'
 			color = {.38, .38, 0}
-		 elseif difficulty == 7 or 17 then
+		 elseif difficulty == 7 or difficulty ==17 then
 			text = 'LFR'
 			color = {.38, .38, 0}
-		 elseif difficulty == 15 or 5 or 6 then
+		 elseif difficulty == 15 or difficulty ==5 or difficulty ==6 then
 			text = raidmem..'H'
 			color = {.38, 0, 0}
 		elseif difficulty == 16 then
@@ -83,16 +83,22 @@ local function StyleMap()
 			color = {0, 0, 0}
 		 end
 	  else
-		 text = maxPlayers..'N'
+		 text = raidmem..'N'
 		 color = {0, 0, 0}
 	  end
 	  Minimap.Difficulty.Texture:SetVertexColor(unpack(color))
 	  Minimap.Difficulty.Text:SetText('|cFF9E9E9E'..text..'|r')
 	  Minimap.Difficulty:Show()
 	end
+	Minimap.Difficulty:RegisterEvent("PLAYER_DIFFICULTY_CHANGED");
+	Minimap.Difficulty:RegisterEvent("INSTANCE_GROUP_SIZE_CHANGED");
+	Minimap.Difficulty:RegisterEvent("UPDATE_INSTANCE_INFO");
+	Minimap.Difficulty:RegisterEvent("GROUP_ROSTER_UPDATE");
+	Minimap.Difficulty:RegisterEvent("PLAYER_GUILD_UPDATE");
+	Minimap.Difficulty:RegisterEvent("PARTY_MEMBER_ENABLE");
+	Minimap.Difficulty:RegisterEvent("PARTY_MEMBER_DISABLE");
+	Minimap.Difficulty:RegisterEvent("GUILD_PARTY_STATE_UPDATED");
 
-	Minimap.Difficulty:RegisterEvent("PLAYER_DIFFICULTY_CHANGED")
-	Minimap.Difficulty:RegisterEvent("UPDATE_INSTANCE_INFO")
 	Minimap.Difficulty:SetScript('OnEvent', OnEvent)
 
 	-------MinimapMailFrame
@@ -179,10 +185,8 @@ end
 
 StyleMap()
 
-
 tMinimap = {
-	  Garrison = {GarrisonLandingPageMinimapButton:GetPoint()
-      }
+	  Garrison = {GarrisonLandingPageMinimapButton:GetPoint()}
    } 
 
 
@@ -202,9 +206,11 @@ tMinimap.Garrison = {frame:GetPoint()}
 frame:StopMovingOrSizing()
 end
 )
+if tMinimap.Garrison[2] == nil then
+
+end
 frame:ClearAllPoints()
-frame:SetParent(UIParent)
-frame:SetPoint(unpack(tMinimap.Garrison))
+frame:SetPoint("TOPLEFT",UIParent,"TOPLEFT",tMinimap.Garrison[4],tMinimap.Garrison[5])
 frame:SetScale(0.8)
 	end
 		)
