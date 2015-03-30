@@ -210,6 +210,7 @@ if tMinimap.Garrison[2] == nil then
 
 end
 frame:ClearAllPoints()
+frame:SetParent(UIParent)
 frame:SetPoint("TOPLEFT",UIParent,"TOPLEFT",tMinimap.Garrison[4],tMinimap.Garrison[5])
 frame:SetScale(0.8)
 	end
@@ -219,4 +220,7 @@ local function ObjTraker()
 local frame = ObjectiveTrackerFrame
 frame:SetPoint("TOP",Minimap,"BOTTOM")
 end
+hooksecurefunc("ObjectiveTracker_OnEvent", ObjTraker)
 hooksecurefunc("ObjectiveTracker_Update", ObjTraker)
+hooksecurefunc("ObjectiveTrackerFrame_OnUpdate", ObjTraker)
+hooksecurefunc("MiniMapInstanceDifficulty_Update", ObjTraker)
